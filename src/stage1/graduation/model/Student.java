@@ -1,18 +1,26 @@
 package stage1.graduation.model;
 
 public class Student implements Comparable<Student> {
-    private final int groupNumber;
-    private final double averageScore;
-    private final int creditNumber;
+    private int groupNumber;
+    private double averageScore;
+    private int creditNumber;
 
-    public Student(int groupNumber, double averageScore, int creditNumber) {
-        this.groupNumber = groupNumber;
-        this.averageScore = averageScore;
-        this.creditNumber = creditNumber;
+    private Student(StudentBuilder studentBuilder) {
+        groupNumber = studentBuilder.groupNumber;
+        averageScore = studentBuilder.averageScore;
+        creditNumber = studentBuilder.creditNumber;
     }
 
-    public static StudentBuilder builder() {
-        return new StudentBuilder();
+    public int getGroupNumber() {
+        return groupNumber;
+    }
+
+    public double getAverageScore() {
+        return averageScore;
+    }
+
+    public int getCreditNumber() {
+        return creditNumber;
     }
 
     public static class StudentBuilder {
@@ -20,23 +28,14 @@ public class Student implements Comparable<Student> {
         private double averageScore;
         private int creditNumber;
 
-        public StudentBuilder groupNumber(int groupNumber) {
+        public StudentBuilder(int groupNumber, double averageScore, int creditNumber) {
             this.groupNumber = groupNumber;
-            return this;
-        }
-
-        public StudentBuilder averageScore(double averageScore) {
             this.averageScore = averageScore;
-            return this;
-        }
-
-        public StudentBuilder creditNumber(int creditNumber) {
             this.creditNumber = creditNumber;
-            return this;
         }
 
-        public Student builder() {
-            return new Student(groupNumber, averageScore, creditNumber);
+        public Student build() {
+            return new Student(this);
         }
     }
 
@@ -53,5 +52,14 @@ public class Student implements Comparable<Student> {
         }
 
         return Integer.compare(this.creditNumber, other.creditNumber);
+    }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "groupNumber=" + groupNumber +
+                ", averageScore=" + averageScore +
+                ", creditNumber=" + creditNumber +
+                '}';
     }
 }
