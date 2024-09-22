@@ -1,18 +1,26 @@
 package stage1.graduation.model;
 
 public class User implements Comparable<User> {
-    private final String name;
-    private final String password;
-    private final String email;
+    private String name;
+    private String password;
+    private String email;
 
-    public User(String name, String password, String email) {
-        this.name = name;
-        this.password = password;
-        this.email = email;
+    private User(UserBuilder userBuilder) {
+        name = userBuilder.name;
+        password = userBuilder.password;
+        email = userBuilder.email;
     }
 
-    public static UserBuilder builder() {
-        return new UserBuilder();
+    public String getName() {
+        return name;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public static class UserBuilder {
@@ -20,23 +28,14 @@ public class User implements Comparable<User> {
         private String password;
         private String email;
 
-        public UserBuilder name(String name) {
+        public UserBuilder(String name, String email, String password) {
             this.name = name;
-            return this;
-        }
-
-        public UserBuilder password(String password) {
-            this.password = password;
-            return this;
-        }
-
-        public UserBuilder email(String email) {
             this.email = email;
-            return this;
+            this.password = password;
         }
 
-        public User builder() {
-            return new User(name, password, email);
+        public User build() {
+            return new User(this);
         }
     }
 
@@ -53,5 +52,14 @@ public class User implements Comparable<User> {
         }
 
         return this.email.compareTo(other.email);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 }
