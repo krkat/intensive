@@ -1,42 +1,28 @@
 package stage1.graduation.model;
 
+import java.util.Comparator;
+
 public class Bus implements Comparable<Bus> {
-    private int number;
-    private String model;
-    private int mileage;
+    private final String model;
+    private final int number;
+    private final int mileage;
 
     private Bus(BusBuilder busBuilder) {
-        number = busBuilder.number;
         model = busBuilder.model;
+        number = busBuilder.number;
         mileage = busBuilder.mileage;
-    }
-
-    public int getNumber() {
-        return number;
     }
 
     public String getModel() {
         return model;
     }
 
-    public int getMileage() {
-        return mileage;
+    public int getNumber() {
+        return number;
     }
 
-    public static class BusBuilder {
-        private int number;
-        private String model;
-        private int mileage;
-
-        public BusBuilder(int number, String model, int mileage) {
-            this.number = number;
-            this.model = model;
-            this.mileage = mileage;
-        }
-
-        public Bus build() {
-            return new Bus(this);
-        }
+    public int getMileage() {
+        return mileage;
     }
 
     @Override
@@ -57,9 +43,59 @@ public class Bus implements Comparable<Bus> {
     @Override
     public String toString() {
         return "Bus{" +
-                "number=" + number +
-                ", model='" + model + '\'' +
+                "model='" + model + '\'' +
+                ", number=" + number +
                 ", mileage=" + mileage +
                 '}';
+    }
+
+    // Компараторы для сортировки по отдельным полям
+    public static Comparator<Bus> compareByModel() {
+        return Comparator.comparing(Bus::getModel);
+    }
+
+    public static Comparator<Bus> compareByNumber() {
+        return Comparator.comparingInt(Bus::getNumber);
+    }
+
+    public static Comparator<Bus> compareByMileage() {
+        return Comparator.comparingInt(Bus::getMileage);
+    }
+
+    //Реализация паттерна Builder
+    public static class BusBuilder {
+        private final String model;
+        private int number;
+        private int mileage;
+
+        public BusBuilder(String model) {
+            if (model == null || model.isEmpty()) {
+                throw new IllegalArgumentException("Модель автобуса не может быть null или пустой");
+            }
+            this.model = model;
+        }
+
+        public BusBuilder setNumber(int number) {
+            if (number <= 0) {
+                throw new IllegalArgumentException("Номер автобуса должен быть больше 0");
+            }
+            this.number = number;
+            return this;
+        }
+
+        public BusBuilder setMileage(int mileage) {
+            if (mileage < 0) {
+                throw new IllegalArgumentException("Пробег не может быть отрицательным");
+            }
+            this.mileage = mileage;
+            return this;
+        }
+
+        public Bus build() {
+            if (this.number <= 0) {
+                throw new IllegalStateException("Должен быть задан номер автобуса, который больше 0");
+            }
+            return new Bus(this);
+        }
     }
 }
