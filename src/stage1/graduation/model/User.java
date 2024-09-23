@@ -1,50 +1,18 @@
 package stage1.graduation.model;
 
+import java.util.Comparator;
+
 public class User implements Comparable<User> {
     private final String name;
     private final String password;
     private final String email;
 
-    // Приватный конструктор для паттерна Builder
-    private User(String name, String password, String email) {
-        this.name = name;
-        this.password = password;
-        this.email = email;
+    private User(UserBuilder userBuilder) {
+        name = userBuilder.name;
+        password = userBuilder.password;
+        email = userBuilder.email;
     }
 
-    // Статический метод для вызова билдера
-    public static UserBuilder builder() {
-        return new UserBuilder();
-    }
-
-    // Вложенный класс Builder
-    public static class UserBuilder {
-        private String name;
-        private String password;
-        private String email;
-
-        public UserBuilder name(String name) {
-            this.name = name;
-            return this;
-        }
-
-        public UserBuilder password(String password) {
-            this.password = password;
-            return this;
-        }
-
-        public UserBuilder email(String email) {
-            this.email = email;
-            return this;
-        }
-
-        // Метод build() для создания объекта User
-        public User build() {
-            return new User(name, password, email);
-        }
-    }
-
-    // Геттеры для доступа к полям
     public String getName() {
         return name;
     }
@@ -57,7 +25,6 @@ public class User implements Comparable<User> {
         return email;
     }
 
-    // Реализация метода compareTo для сортировки по полям
     @Override
     public int compareTo(User other) {
         int nameComparison = this.name.compareTo(other.name);
@@ -73,7 +40,6 @@ public class User implements Comparable<User> {
         return this.email.compareTo(other.email);
     }
 
-    // Переопределение метода toString для удобного вывода объекта
     @Override
     public String toString() {
         return "User{" +
@@ -81,5 +47,56 @@ public class User implements Comparable<User> {
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 '}';
+    }
+
+    public static Comparator<User> compareByName() {
+        return Comparator.comparing(User::getName);
+    }
+
+    public static Comparator<User> compareByPassword() {
+        return Comparator.comparing(User::getPassword);
+    }
+
+    public static Comparator<User> compareByEmail() {
+        return Comparator.comparing(User::getEmail);
+    }
+
+    public static class UserBuilder {
+        private final String name;
+        private String password;
+        private String email;
+
+        public UserBuilder(String name) {
+            if (name == null || name.isEmpty()) {
+                throw new RuntimeException("Имя не может быть null или пустым");
+            }
+            this.name = name;
+        }
+
+        public UserBuilder setPassword(String password) {
+            if (password == null || password.isEmpty() || password.length() > 30) {
+                throw new RuntimeException("Пароль не может быть null или пустым, и не может быть больше 30 символов");
+            }
+            this.password = password;
+            return this;
+        }
+
+        public UserBuilder setEmail(String email) {
+            if (email == null || !email.matches("^[\\w-\\.]+@[\\w-]+(\\.[\\w-]+)*\\.[a-z]{2,}$")) {
+                throw new RuntimeException("Неверный формат адреса электронной почты");
+            }
+            this.email = email;
+            return this;
+        }
+
+        public User build() {
+            if (password == null) {
+                throw new RuntimeException("Необходимо указать пароль");
+            }
+            if (email == null) {
+                throw new RuntimeException("Необходимо указать адрес электронной почты");
+            }
+            return new User(this);
+        }
     }
 }

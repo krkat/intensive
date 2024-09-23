@@ -1,63 +1,30 @@
 package stage1.graduation.model;
 
+import java.util.Comparator;
+
 public class Student implements Comparable<Student> {
     private final int groupNumber;
-    private final double averageScore;
-    private final int creditNumber;
+    private final float averageMark;
+    private final int recordBookNumber;
 
-    // Приватный конструктор для паттерна Builder
-    private Student(int groupNumber, double averageScore, int creditNumber) {
-        this.groupNumber = groupNumber;
-        this.averageScore = averageScore;
-        this.creditNumber = creditNumber;
+    private Student(StudentBuilder studentBuilder) {
+        groupNumber = studentBuilder.groupNumber;
+        averageMark = studentBuilder.averageMark;
+        recordBookNumber = studentBuilder.recordBookNumber;
     }
 
-    // Статический метод для вызова билдера
-    public static StudentBuilder builder() {
-        return new StudentBuilder();
-    }
-
-    // Вложенный класс Builder
-    public static class StudentBuilder {
-        private int groupNumber;
-        private double averageScore;
-        private int creditNumber;
-
-        public StudentBuilder groupNumber(int groupNumber) {
-            this.groupNumber = groupNumber;
-            return this;
-        }
-
-        public StudentBuilder averageScore(double averageScore) {
-            this.averageScore = averageScore;
-            return this;
-        }
-
-        public StudentBuilder creditNumber(int creditNumber) {
-            this.creditNumber = creditNumber;
-            return this;
-        }
-
-        // Метод build() для создания объекта Student
-        public Student build() {
-            return new Student(groupNumber, averageScore, creditNumber);
-        }
-    }
-
-    // Геттеры для доступа к полям, если требуется
     public int getGroupNumber() {
         return groupNumber;
     }
 
-    public double getAverageScore() {
-        return averageScore;
+    public float getAverageMark() {
+        return averageMark;
     }
 
-    public int getCreditNumber() {
-        return creditNumber;
+    public int getRecordBookNumber() {
+        return recordBookNumber;
     }
 
-    // Реализация метода compareTo для сортировки по полям
     @Override
     public int compareTo(Student other) {
         int groupComparison = Integer.compare(this.groupNumber, other.groupNumber);
@@ -65,21 +32,65 @@ public class Student implements Comparable<Student> {
             return groupComparison;
         }
 
-        int scoreComparison = Double.compare(this.averageScore, other.averageScore);
+        int scoreComparison = Float.compare(this.averageMark, other.averageMark);
         if (scoreComparison != 0) {
             return scoreComparison;
         }
 
-        return Integer.compare(this.creditNumber, other.creditNumber);
+        return Integer.compare(this.recordBookNumber, other.recordBookNumber);
     }
 
-    // Переопределение метода toString для удобного вывода объекта
     @Override
     public String toString() {
         return "Student{" +
                 "groupNumber=" + groupNumber +
-                ", averageScore=" + averageScore +
-                ", creditNumber=" + creditNumber +
+                ", averageMark=" + averageMark +
+                ", recordBookNumber=" + recordBookNumber +
                 '}';
+    }
+
+    public static Comparator<Student> compareByGroupNumber() {
+        return Comparator.comparingInt(Student::getGroupNumber);
+    }
+
+    public static Comparator<Student> compareByAverageMark() {
+        return Comparator.comparingDouble(Student::getAverageMark);
+    }
+
+    public static Comparator<Student> compareByRecordBookNumber() {
+        return Comparator.comparingInt(Student::getRecordBookNumber);
+    }
+
+    public static class StudentBuilder {
+        private final int recordBookNumber;
+        private int groupNumber;
+        private float averageMark;
+
+        public StudentBuilder(int recordBookNumber) {
+            if (recordBookNumber <= 0 || recordBookNumber > 999_999) {
+                throw new RuntimeException("Номер зачетной книжки должен быть больше 0 и меньше 1_000_000");
+            }
+            this.recordBookNumber = recordBookNumber;
+        }
+
+        public StudentBuilder setGroupNumber(int groupNumber) {
+            if (groupNumber <= 0 || groupNumber > 9_999) {
+                throw new RuntimeException("Номер группы должен быть больше 0 и меньше 10_000");
+            }
+            this.groupNumber = groupNumber;
+            return this;
+        }
+
+        public StudentBuilder setAverageMark(float averageMark) {
+            if (averageMark < 0.0f || averageMark > 5.0f) {
+                throw new RuntimeException("Средний балл должен быть в промежутке от 0 до 5");
+            }
+            this.averageMark = averageMark;
+            return this;
+        }
+
+        public Student build() {
+            return new Student(this);
+        }
     }
 }

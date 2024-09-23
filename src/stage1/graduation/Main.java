@@ -1,85 +1,126 @@
 package stage1.graduation;
 
-import stage1.graduation.model.Autobus;
+import stage1.graduation.model.Bus;
 import stage1.graduation.model.Student;
 import stage1.graduation.model.User;
-import stage1.graduation.strategy.FileInputStrategy;
-import stage1.graduation.strategy.GeneratorInputStrategy;
-import stage1.graduation.strategy.InputStrategy;
-import stage1.graduation.strategy.ManualInputStrategy;
-
-import java.util.Arrays;
-import java.util.Scanner;
+import stage1.graduation.strategy.*;
 
 public class Main {
+    static final int MIN_LENGTH = 1;
+    static final int MAX_LENGTH = 10;
+    static final String YES = "yes";
+    static final String NO = "no";
+
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        boolean running = true;
+        String userAnswer = YES;
+        boolean isCorrectInput;
 
-        while (running) {
-            System.out.println("Выберите класс для работы:");
-            System.out.println("1. Autobus");
-            System.out.println("2. User");
-            System.out.println("3. Student");
-            System.out.println("0. Выход");
-            int classChoice = scanner.nextInt();
+        do {
+            if (YES.equals(userAnswer)) {
+                int type = askType();
+                int length = askLength();
+                int inputMethod = askInputMethod();
 
-            if (classChoice == 0) {
-                running = false;
-                break;
-            }
-
-            System.out.println("Выберите способ ввода данных:");
-            System.out.println("1. Вручную");
-            System.out.println("2. Сгенерировать случайные данные");
-            System.out.println("3. Загрузить из файла");
-            int inputChoice = scanner.nextInt();
-
-            System.out.println("Введите количество элементов:");
-            int arrayLength = scanner.nextInt();
-
-            switch (classChoice) {
-                case 1 -> {
-                    InputStrategy<Autobus> inputStrategy = chooseInputStrategy(inputChoice, Autobus.class, scanner);
-                    Autobus[] autobusArray = inputStrategy.input(Autobus.class, arrayLength);
-                    System.out.println("Введенные данные для класса Autobus:");
-                    Arrays.stream(autobusArray).forEach(System.out::println);
+                // В зависимости от типа создадим массив объектов
+                if (type == 1) { // Автобус
+                    handleInputAndOutput(Bus.class, length, inputMethod);
+                } else if (type == 2) { // Пользователь
+                    handleInputAndOutput(User.class, length, inputMethod);
+                } else if (type == 3) { // Студент
+                    handleInputAndOutput(Student.class, length, inputMethod);
                 }
-                case 2 -> {
-                    InputStrategy<User> inputStrategy = chooseInputStrategy(inputChoice, User.class, scanner);
-                    User[] userArray = inputStrategy.input(User.class, arrayLength);
-                    System.out.println("Введенные данные для класса User:");
-                    Arrays.stream(userArray).forEach(System.out::println);
-                }
-                case 3 -> {
-                    InputStrategy<Student> inputStrategy = chooseInputStrategy(inputChoice, Student.class, scanner);
-                    Student[] studentArray = inputStrategy.input(Student.class, arrayLength);
-                    System.out.println("Введенные данные для класса Student:");
-                    Arrays.stream(studentArray).forEach(System.out::println);
-                }
-                default -> System.out.println("Неверный выбор класса.");
-            }
 
-            System.out.println("Хотите повторить? (1 - Да, 0 - Нет)");
-            int repeat = scanner.nextInt();
-            if (repeat == 0) {
-                running = false;
+                isCorrectInput = true;
+            } else {
+                isCorrectInput = false;
             }
-        }
+            userAnswer = askToContinue(isCorrectInput).toLowerCase();
+        } while (!NO.equals(userAnswer));
 
-        System.out.println("Программа завершена.");
+        Console.println("\n=== Завершение программы ===");
+        Console.close();
     }
 
-    // Универсальный метод для выбора InputStrategy
-    private static <T> InputStrategy<T> chooseInputStrategy(int inputChoice, Class<T> clazz, Scanner scanner) {
-        if (inputChoice == 1) {
-            return new ManualInputStrategy<>();
-        } else if (inputChoice == 2) {
-            return new GeneratorInputStrategy<>();
+    // Универсальный метод для работы с разными типами объектов
+    private static <T> void handleInputAndOutput(Class<T> clazz, int length, int inputMethod) {
+        InputStrategy<T> strategy = null;
+
+        // Выбираем стратегию ввода данных
+        switch (inputMethod) {
+            case 1: // Ручной ввод
+                strategy = new ManualInputStrategy<>();
+                break;
+            case 2: // Генерация данных
+                strategy = new GeneratorInputStrategy<>();
+                break;
+            case 3: // Ввод данных из файла
+                strategy = new FileInputStrategy<>(getFilePathForType(clazz));
+                break;
+        }
+
+        // Ввод данных
+        T[] objects = strategy.input(clazz, length);
+
+        // Вывод данных без сортировки и поиска
+        Console.println("\n=== Выведенные объекты ===");
+        for (T obj : objects) {
+            Console.println(obj.toString());
+        }
+        Console.println("==========================\n");
+    }
+
+    private static int askType() {
+        Console.println("\nВыберите тип объекта:");
+        Console.println("1 - Автобус");
+        Console.println("2 - Пользователь");
+        Console.println("3 - Студент");
+        Console.print("Введите тип объекта: ");
+        return inputItem(1, 3);
+    }
+
+    private static int inputItem(int minBound, int maxBound) {
+        int item;
+        boolean isWrongInput = false;
+        do {
+            if (isWrongInput) {
+                Console.printf("Ошибка! Введите число от %d до %d: ", minBound, maxBound);
+            }
+            item = Console.readInt();
+            isWrongInput = true;
+        } while (item < minBound || item > maxBound);
+        return item;
+    }
+
+    private static int askLength() {
+        Console.printf("\nВведите длину массива от %d до %d: ", MIN_LENGTH, MAX_LENGTH);
+        return inputItem(MIN_LENGTH, MAX_LENGTH);
+    }
+
+    private static int askInputMethod() {
+        Console.println("\nВыберите способ ввода данных:");
+        Console.println("1 - Ручной ввод");
+        Console.println("2 - Генерация");
+        Console.println("3 - Из файла");
+        Console.print("Введите способ ввода данных: ");
+        return inputItem(1, 3);
+    }
+
+    private static String askToContinue(boolean isCorrectInput) {
+        Console.print(isCorrectInput ? "\nХотите продолжить? [yes/no]: " :
+                "Введите корректный ответ [yes/no]: ");
+        return Console.readString();
+    }
+
+    // Возвращает путь к файлу для выбранного типа объекта
+    private static String getFilePathForType(Class<?> clazz) {
+        if (clazz.equals(Bus.class)) {
+            return "resources/bus.txt";
+        } else if (clazz.equals(User.class)) {
+            return "resources/user.txt";
+        } else if (clazz.equals(Student.class)) {
+            return "resources/student.txt";
         } else {
-            System.out.println("Введите путь к файлу:");
-            String filePath = scanner.next();
-            return new FileInputStrategy<>(filePath);
+            throw new IllegalArgumentException("Неверный тип объекта");
         }
     }
 }
