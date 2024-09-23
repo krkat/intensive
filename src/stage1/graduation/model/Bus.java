@@ -49,7 +49,6 @@ public class Bus implements Comparable<Bus> {
                 '}';
     }
 
-    // Компараторы для сортировки по отдельным полям
     public static Comparator<Bus> compareByModel() {
         return Comparator.comparing(Bus::getModel);
     }
@@ -62,7 +61,6 @@ public class Bus implements Comparable<Bus> {
         return Comparator.comparingInt(Bus::getMileage);
     }
 
-    //Реализация паттерна Builder
     public static class BusBuilder {
         private final String model;
         private int number;
@@ -70,14 +68,14 @@ public class Bus implements Comparable<Bus> {
 
         public BusBuilder(String model) {
             if (model == null || model.isEmpty()) {
-                throw new IllegalArgumentException("Модель автобуса не может быть null или пустой");
+                throw new RuntimeException("Модель автобуса не может быть null или пустой");
             }
             this.model = model;
         }
 
         public BusBuilder setNumber(int number) {
-            if (number <= 0) {
-                throw new IllegalArgumentException("Номер автобуса должен быть больше 0");
+            if (number <= 0 || number > 999) {
+                throw new RuntimeException("Номер автобуса должен быть больше 0 и меньше 1000");
             }
             this.number = number;
             return this;
@@ -85,7 +83,7 @@ public class Bus implements Comparable<Bus> {
 
         public BusBuilder setMileage(int mileage) {
             if (mileage < 0) {
-                throw new IllegalArgumentException("Пробег не может быть отрицательным");
+                throw new RuntimeException("Пробег не может быть отрицательным");
             }
             this.mileage = mileage;
             return this;
@@ -93,7 +91,7 @@ public class Bus implements Comparable<Bus> {
 
         public Bus build() {
             if (this.number <= 0) {
-                throw new IllegalStateException("Должен быть задан номер автобуса, который больше 0");
+                throw new RuntimeException("Должен быть задан номер автобуса, который больше 0");
             }
             return new Bus(this);
         }

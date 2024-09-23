@@ -49,7 +49,6 @@ public class User implements Comparable<User> {
                 '}';
     }
 
-    // Компараторы для сортировки по отдельным полям
     public static Comparator<User> compareByName() {
         return Comparator.comparing(User::getName);
     }
@@ -62,7 +61,6 @@ public class User implements Comparable<User> {
         return Comparator.comparing(User::getEmail);
     }
 
-    //Реализация паттерна Builder
     public static class UserBuilder {
         private final String name;
         private String password;
@@ -70,22 +68,22 @@ public class User implements Comparable<User> {
 
         public UserBuilder(String name) {
             if (name == null || name.isEmpty()) {
-                throw new IllegalArgumentException("Имя не может быть null или пустым");
+                throw new RuntimeException("Имя не может быть null или пустым");
             }
             this.name = name;
         }
 
         public UserBuilder setPassword(String password) {
-            if (password == null || password.isEmpty()) {
-                throw new IllegalArgumentException("Пароль не может быть null или пустым");
+            if (password == null || password.isEmpty() || password.length() > 30) {
+                throw new RuntimeException("Пароль не может быть null или пустым, и не может быть больше 30 символов");
             }
             this.password = password;
             return this;
         }
 
         public UserBuilder setEmail(String email) {
-            if (email == null || !email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
-                throw new IllegalArgumentException("Неверный формат адреса электронной почты");
+            if (email == null || !email.matches("^[\\w-\\.]+@[\\w-]+(\\.[\\w-]+)*\\.[a-z]{2,}$")) {
+                throw new RuntimeException("Неверный формат адреса электронной почты");
             }
             this.email = email;
             return this;
@@ -93,10 +91,10 @@ public class User implements Comparable<User> {
 
         public User build() {
             if (password == null) {
-                throw new IllegalStateException("Необходимо указать пароль");
+                throw new RuntimeException("Необходимо указать пароль");
             }
             if (email == null) {
-                throw new IllegalStateException("Необходимо указать адрес электронной почты");
+                throw new RuntimeException("Необходимо указать адрес электронной почты");
             }
             return new User(this);
         }
