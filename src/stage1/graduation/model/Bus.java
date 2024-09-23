@@ -63,22 +63,18 @@ public class Bus implements Comparable<Bus> {
 
     public static class BusBuilder {
         private final String model;
-        private int number;
+        private final int number;
         private int mileage;
 
-        public BusBuilder(String model) {
+        public BusBuilder(String model, int number) {
             if (model == null || model.isEmpty()) {
                 throw new RuntimeException("Модель автобуса не может быть null или пустой");
             }
-            this.model = model;
-        }
-
-        public BusBuilder setNumber(int number) {
             if (number <= 0 || number > 999) {
                 throw new RuntimeException("Номер автобуса должен быть больше 0 и меньше 1000");
             }
+            this.model = model;
             this.number = number;
-            return this;
         }
 
         public BusBuilder setMileage(int mileage) {
@@ -90,9 +86,6 @@ public class Bus implements Comparable<Bus> {
         }
 
         public Bus build() {
-            if (this.number <= 0) {
-                throw new RuntimeException("Должен быть задан номер автобуса, который больше 0");
-            }
             return new Bus(this);
         }
     }
