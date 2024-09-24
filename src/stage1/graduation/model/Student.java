@@ -1,8 +1,10 @@
 package stage1.graduation.model;
 
 import java.util.Comparator;
+import java.util.Objects;
 
 public class Student implements Comparable<Student> {
+
     private final int groupNumber;
     private final float averageMark;
     private final int recordBookNumber;
@@ -23,6 +25,18 @@ public class Student implements Comparable<Student> {
 
     public int getRecordBookNumber() {
         return recordBookNumber;
+    }
+
+    public static Comparator<Student> compareByGroupNumber() {
+        return Comparator.comparingInt(Student::getGroupNumber);
+    }
+
+    public static Comparator<Student> compareByAverageMark() {
+        return Comparator.comparingDouble(Student::getAverageMark);
+    }
+
+    public static Comparator<Student> compareByRecordBookNumber() {
+        return Comparator.comparingInt(Student::getRecordBookNumber);
     }
 
     @Override
@@ -49,19 +63,27 @@ public class Student implements Comparable<Student> {
                 '}';
     }
 
-    public static Comparator<Student> compareByGroupNumber() {
-        return Comparator.comparingInt(Student::getGroupNumber);
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+        if (!(object instanceof Student)) {
+            return false;
+        }
+        Student student = (Student) object;
+        return groupNumber == student.groupNumber &&
+                averageMark == student.averageMark &&
+                recordBookNumber == student.recordBookNumber;
     }
 
-    public static Comparator<Student> compareByAverageMark() {
-        return Comparator.comparingDouble(Student::getAverageMark);
-    }
-
-    public static Comparator<Student> compareByRecordBookNumber() {
-        return Comparator.comparingInt(Student::getRecordBookNumber);
+    @Override
+    public int hashCode() {
+        return Objects.hash(groupNumber, averageMark, recordBookNumber);
     }
 
     public static class StudentBuilder {
+
         private final int recordBookNumber;
         private int groupNumber;
         private float averageMark;
