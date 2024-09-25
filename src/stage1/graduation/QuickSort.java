@@ -18,7 +18,7 @@ public class QuickSort {
         }
     }
 
-    public static <T> int partition(T[] arr, int low, int high, Comparator<T> comparator) {
+    private static <T> int partition(T[] arr, int low, int high, Comparator<T> comparator) {
         T pivot = arr[high];
         int i = low - 1;
 
