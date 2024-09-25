@@ -1,8 +1,10 @@
 package stage1.graduation.model;
 
 import java.util.Comparator;
+import java.util.Objects;
 
 public class Bus implements Comparable<Bus> {
+
     private final String model;
     private final int number;
     private final int mileage;
@@ -23,6 +25,18 @@ public class Bus implements Comparable<Bus> {
 
     public int getMileage() {
         return mileage;
+    }
+
+    public static Comparator<Bus> compareByModel() {
+        return Comparator.comparing(Bus::getModel);
+    }
+
+    public static Comparator<Bus> compareByNumber() {
+        return Comparator.comparingInt(Bus::getNumber);
+    }
+
+    public static Comparator<Bus> compareByMileage() {
+        return Comparator.comparingInt(Bus::getMileage);
     }
 
     @Override
@@ -49,19 +63,27 @@ public class Bus implements Comparable<Bus> {
                 '}';
     }
 
-    public static Comparator<Bus> compareByModel() {
-        return Comparator.comparing(Bus::getModel);
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+        if (!(object instanceof Bus)) {
+            return false;
+        }
+        Bus bus = (Bus) object;
+        return Objects.equals(model, bus.model) &&
+                number == bus.number &&
+                mileage == bus.mileage;
     }
 
-    public static Comparator<Bus> compareByNumber() {
-        return Comparator.comparingInt(Bus::getNumber);
-    }
-
-    public static Comparator<Bus> compareByMileage() {
-        return Comparator.comparingInt(Bus::getMileage);
+    @Override
+    public int hashCode() {
+        return Objects.hash(model, number, mileage);
     }
 
     public static class BusBuilder {
+
         private final String model;
         private final int number;
         private int mileage;

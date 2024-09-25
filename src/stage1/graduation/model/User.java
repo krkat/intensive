@@ -1,8 +1,10 @@
 package stage1.graduation.model;
 
 import java.util.Comparator;
+import java.util.Objects;
 
 public class User implements Comparable<User> {
+
     private final String name;
     private final String password;
     private final String email;
@@ -23,6 +25,18 @@ public class User implements Comparable<User> {
 
     public String getEmail() {
         return email;
+    }
+
+    public static Comparator<User> compareByName() {
+        return Comparator.comparing(User::getName);
+    }
+
+    public static Comparator<User> compareByPassword() {
+        return Comparator.comparing(User::getPassword);
+    }
+
+    public static Comparator<User> compareByEmail() {
+        return Comparator.comparing(User::getEmail);
     }
 
     @Override
@@ -49,19 +63,27 @@ public class User implements Comparable<User> {
                 '}';
     }
 
-    public static Comparator<User> compareByName() {
-        return Comparator.comparing(User::getName);
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+        if (!(object instanceof User)) {
+            return false;
+        }
+        User user = (User) object;
+        return Objects.equals(name, user.name) &&
+                Objects.equals(password, user.password) &&
+                Objects.equals(email, user.email);
     }
 
-    public static Comparator<User> compareByPassword() {
-        return Comparator.comparing(User::getPassword);
-    }
-
-    public static Comparator<User> compareByEmail() {
-        return Comparator.comparing(User::getEmail);
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, password, email);
     }
 
     public static class UserBuilder {
+
         private final String name;
         private String password;
         private String email;
