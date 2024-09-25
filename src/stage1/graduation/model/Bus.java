@@ -39,6 +39,22 @@ public class Bus implements Comparable<Bus> {
         return Comparator.comparingInt(Bus::getMileage);
     }
 
+    public static Comparator<Bus> compareByEvenNumber() {
+        return (o1, o2) -> {
+            if (o1.number % 2 == 0 && o2.number % 2 == 0) {
+                return Integer.compare(o1.number, o2.number);
+            } else return 0;
+        };
+    }
+
+    public static Comparator<Bus> compareByEvenMileage() {
+        return (o1, o2) -> {
+            if (o1.mileage % 2 == 0 && o2.mileage % 2 == 0) {
+                return Integer.compare(o1.mileage, o2.mileage);
+            } else return 0;
+        };
+    }
+
     @Override
     public int compareTo(Bus other) {
         int modelComparison = this.model.compareTo(other.model);

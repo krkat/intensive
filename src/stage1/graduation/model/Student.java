@@ -39,6 +39,14 @@ public class Student implements Comparable<Student> {
         return Comparator.comparingInt(Student::getRecordBookNumber);
     }
 
+    public static Comparator<Student> compareByEvenRecordBookNumber() {
+        return (o1, o2) -> {
+            if (o1.recordBookNumber % 2 == 0 && o2.recordBookNumber % 2 == 0) {
+                return Integer.compare(o1.recordBookNumber,o2.recordBookNumber);
+            } else return 0;
+        };
+    }
+
     @Override
     public int compareTo(Student other) {
         int groupComparison = Integer.compare(this.groupNumber, other.groupNumber);
