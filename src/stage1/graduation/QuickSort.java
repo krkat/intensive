@@ -10,7 +10,7 @@ import java.util.Comparator;
 public class QuickSort {
 
     // Quicksort algorithm
-    private static <T> void quicksort(T[] arr, int low, int high, Comparator<T> comparator) {
+    public static <T> void quicksort(T[] arr, int low, int high, Comparator<T> comparator) {
         if (low < high) {
             int pi = partition(arr, low, high, comparator);
             quicksort(arr, low, pi - 1, comparator);
@@ -18,7 +18,7 @@ public class QuickSort {
         }
     }
 
-    private static <T> int partition(T[] arr, int low, int high, Comparator<T> comparator) {
+    public static <T> int partition(T[] arr, int low, int high, Comparator<T> comparator) {
         T pivot = arr[high];
         int i = low - 1;
 
