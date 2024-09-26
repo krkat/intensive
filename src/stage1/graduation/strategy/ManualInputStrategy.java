@@ -9,83 +9,93 @@ import java.lang.reflect.Array;
 
 public class ManualInputStrategy<T> implements InputStrategy<T> {
     @Override
-    public T[] input(Class<T> clazz, int arrayLength) {
-        T[] array = (T[]) Array.newInstance(clazz, arrayLength);
+    public T[] input(Class<T> classType, int arrayLength) {
+        T[] array = (T[]) Array.newInstance(classType, arrayLength);
 
         for (int i = 0; i < arrayLength; i++) {
             Console.println("====================================");
-            if (clazz == Bus.class) {
-                Console.printf("Введите данные для автобуса %d:\n", i + 1);
-                int number = askForBusNumber(i + 1);
-                String model = askForBusModel(i + 1);
-                int mileage = askForBusMileage(i + 1);
-                array[i] = clazz.cast(new Bus.BusBuilder(model, number).setMileage(mileage).build());
-            } else if (clazz == User.class) {
-                Console.printf("Введите данные для пользователя %d:\n", i + 1);
-                String name = askForUserName(i + 1);
-                String password = askForUserPassword(i + 1);
-                String email = askForUserEmail(i + 1);
-                array[i] = clazz.cast(new User.UserBuilder(name).setPassword(password).setEmail(email).build());
-            } else if (clazz == Student.class) {
-                Console.printf("Введите данные для студента %d:\n", i + 1);
-                int groupNumber = askForStudentGroupNumber(i + 1);
-                float averageScore = askForStudentAverageScore(i + 1);
-                int recordBookNumber = askForStudentRecordBookNumber(i + 1);
-                array[i] = clazz.cast(new Student.StudentBuilder(recordBookNumber)
-                        .setGroupNumber(groupNumber)
-                        .setAverageMark(averageScore)
-                        .build());
+            if (classType == Bus.class) {
+                array[i] = classType.cast(inputBus(i));
+            } else if (classType == User.class) {
+                array[i] = classType.cast(inputUser(i));
+            } else if (classType == Student.class) {
+                array[i] = classType.cast(inputStudent(i));
             }
             Console.println("====================================\n");
         }
         return array;
     }
 
-    // Методы для ввода данных для автобусов
-    private int askForBusNumber(int busIndex) {
-        Console.print("Введите номер автобуса: ");
-        return Console.readInt();
+    // Ввод данных для автобусов
+    private Bus inputBus(int busIndex) {
+        Console.printf("Введите данные для автобуса %d:\n", busIndex + 1);
+        String model = askForBusModel();
+        int number = askForBusNumber();
+        int mileage = askForBusMileage();
+        return new Bus.BusBuilder(model, number).setMileage(mileage).build();
     }
 
-    private String askForBusModel(int busIndex) {
+    private User inputUser(int userIndex) {
+        Console.printf("Введите данные для пользователя %d:\n", userIndex + 1);
+        String name = askForUserName();
+        String password = askForUserPassword();
+        String email = askForUserEmail();
+        return new User.UserBuilder(name).setPassword(password).setEmail(email).build();
+    }
+
+    private Student inputStudent(int studentIndex) {
+        Console.printf("Введите данные для студента %d:\n", studentIndex + 1);
+        int recordBookNumber = askForStudentRecordBookNumber();
+        int groupNumber = askForStudentGroupNumber();
+        float averageScore = askForStudentAverageScore();
+        return new Student.StudentBuilder(recordBookNumber)
+                .setGroupNumber(groupNumber)
+                .setAverageMark(averageScore)
+                .build();
+    }
+
+    private String askForBusModel() {
         Console.print("Введите модель автобуса: ");
         return Console.readString();
     }
 
-    private int askForBusMileage(int busIndex) {
+    private int askForBusNumber() {
+        Console.print("Введите номер автобуса: ");
+        return Console.readInt();
+    }
+
+    private int askForBusMileage() {
         Console.print("Введите пробег автобуса: ");
         return Console.readInt();
     }
 
-    // Методы для ввода данных для пользователей
-    private String askForUserName(int userIndex) {
+    private String askForUserName() {
         Console.print("Введите имя пользователя: ");
         return Console.readString();
     }
 
-    private String askForUserPassword(int userIndex) {
+    private String askForUserPassword() {
         Console.print("Введите пароль пользователя: ");
         return Console.readString();
     }
 
-    private String askForUserEmail(int userIndex) {
+    private String askForUserEmail() {
         Console.print("Введите email пользователя: ");
         return Console.readString();
     }
 
-    // Методы для ввода данных для студентов
-    private int askForStudentGroupNumber(int studentIndex) {
+    private int askForStudentRecordBookNumber() {
+        Console.print("Введите номер зачётной книжки студента: ");
+        return Console.readInt();
+    }
+
+    private int askForStudentGroupNumber() {
         Console.print("Введите номер группы студента: ");
         return Console.readInt();
     }
 
-    private float askForStudentAverageScore(int studentIndex) {
+    private float askForStudentAverageScore() {
         Console.print("Введите средний балл студента: ");
         return Console.readFloat();
-    }
-
-    private int askForStudentRecordBookNumber(int studentIndex) {
-        Console.print("Введите номер зачётной книжки студента: ");
-        return Console.readInt();
     }
 }

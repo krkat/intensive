@@ -17,7 +17,6 @@ public enum MailDomains {
         return domain;
     }
 
-    // Метод для получения случайного домена
     public static MailDomains getRandom() {
         MailDomains[] values = values();
         int length = values.length;

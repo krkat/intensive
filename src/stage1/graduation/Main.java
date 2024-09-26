@@ -21,7 +21,6 @@ public class Main {
                 int length = askLength();
                 int inputMethod = askInputMethod();
 
-                // В зависимости от типа создадим массив объектов
                 if (type == 1) { // Автобус
                     handleInputAndOutput(Bus.class, length, inputMethod);
                 } else if (type == 2) { // Пользователь
@@ -41,27 +40,24 @@ public class Main {
         Console.close();
     }
 
-    // Универсальный метод для работы с разными типами объектов
     private static <T> void handleInputAndOutput(Class<T> clazz, int length, int inputMethod) {
         InputStrategy<T> strategy = null;
 
-        // Выбираем стратегию ввода данных
         switch (inputMethod) {
-            case 1: // Ручной ввод
+            case 1:
                 strategy = new ManualInputStrategy<>();
                 break;
-            case 2: // Генерация данных
+            case 2:
                 strategy = new GeneratorInputStrategy<>();
                 break;
-            case 3: // Ввод данных из файла
+            case 3:
                 strategy = new FileInputStrategy<>(getFilePathForType(clazz));
                 break;
         }
 
-        // Ввод данных
+
         T[] objects = strategy.input(clazz, length);
 
-        // Вывод данных без сортировки и поиска
         Console.println("\n=== Выведенные объекты ===");
         for (T obj : objects) {
             Console.println(obj.toString());
@@ -112,12 +108,12 @@ public class Main {
     }
 
     // Возвращает путь к файлу для выбранного типа объекта
-    private static String getFilePathForType(Class<?> clazz) {
-        if (clazz.equals(Bus.class)) {
+    private static String getFilePathForType(Class<?> classType) {
+        if (classType.equals(Bus.class)) {
             return "resources/bus.txt";
-        } else if (clazz.equals(User.class)) {
+        } else if (classType.equals(User.class)) {
             return "resources/user.txt";
-        } else if (clazz.equals(Student.class)) {
+        } else if (classType.equals(Student.class)) {
             return "resources/student.txt";
         } else {
             throw new IllegalArgumentException("Неверный тип объекта");

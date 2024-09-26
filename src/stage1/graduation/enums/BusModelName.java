@@ -20,7 +20,6 @@ public enum BusModelName {
         return model;
     }
 
-    // Метод для получения случайной модели
     public static BusModelName getRandom() {
         BusModelName[] values = values();
         int length = values.length;
