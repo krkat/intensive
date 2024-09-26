@@ -18,6 +18,13 @@ public class Console {
         System.out.printf(format, args);
     }
 
+    public static void print(Object... objects) {
+        for (Object o : objects) {
+            System.out.println(o);
+        }
+        System.out.println();
+    }
+
     public static String readString() {
         return scanner.nextLine();
     }

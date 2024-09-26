@@ -9,10 +9,9 @@ import java.io.FileReader;
 import java.lang.reflect.Array;
 
 public class FileInputStrategy<T> implements InputStrategy<T> {
-    private final String filePath;
+    private final String filePath = null;
 
-    public FileInputStrategy(String filePath) {
-        this.filePath = filePath;
+    public FileInputStrategy() {
     }
 
     @Override
