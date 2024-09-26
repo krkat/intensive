@@ -30,6 +30,7 @@ public class QuickSort {
         arr[high] = temp;
 
         return i + 1;
+    }
 
     public static <T> void sortByEvens(T[] elements, Comparator<T> comparatorByEvens) {
         for (int i = 0; i < elements.length; i++) {
