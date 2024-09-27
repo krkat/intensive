@@ -6,6 +6,8 @@ import stage1.graduation.model.Bus;
 import stage1.graduation.model.Student;
 import stage1.graduation.model.User;
 import stage1.graduation.strategy.InputData;
+import stage1.graduation.util.Console;
+import stage1.graduation.util.Helper;
 
 public class Main {
     static final int MIN_LENGTH = 1;
@@ -39,10 +41,10 @@ public class Main {
                 Console.println("\n====================================");
                 Console.println("Массив введенных объектов:");
                 Console.printObjects(userObjects);
-                //Comparable[] comparableObjects = new Comparable[]{Comparable.class.cast(userObjects)};
 
                 if (entityType == EntityType.BUS) {
                     Bus[] buses = castToBus(userObjects);
+
                     Helper.quicksort(buses, 0, length - 1);
                     Console.println("\n====================================");
                     Console.println("Массив после сортировки по всем полям:");
@@ -52,21 +54,18 @@ public class Main {
                     Console.println("Введите объект, который хотите найти:");
                     Bus bus = Bus.inputBus();
                     Console.println("Поиск объекта:");
-                    int index = Helper.binarySearch(buses, bus);
-                    if (index == -1) {
-                        Console.println("Объект не найден.");
-                    } else {
-                        Console.printf("Индекс объекта: %d%n", index);
-                    }
+                    printSearchResult(Helper.binarySearch(buses, bus));
 
                     Console.println("\n====================================");
                     Console.println("Дополнительная сортировка толькл классов с четными значениями полей:");
                     Console.println("Автобусы сортируются по номерам:");
                     Helper.sortByEvens(buses, Bus.compareByEvenNumber());
+
                     Console.println("Объекты после сортировки четных полей:");
                     Console.printObjects(buses);
                 } else if (entityType == EntityType.STUDENT) {
                     Student[] students = castToStudent(userObjects);
+
                     Helper.quicksort(students, 0, userObjects.length - 1);
                     Console.println("\n====================================");
                     Console.println("Массив после сортировки по всем полям:");
@@ -76,23 +75,18 @@ public class Main {
                     Console.println("Введите объект, который хотите найти:");
                     Student student = Student.inputStudent();
                     Console.println("Поиск объекта:");
-                    int index = Helper.binarySearch(students, student);
-                    if (index == -1) {
-                        Console.println("Объект не найден.");
-                    } else {
-                        Console.printf("Индекс объекта: %d%n", index);
-                    }
+                    printSearchResult(Helper.binarySearch(students, student));
+
                     Console.println("\n====================================");
                     Console.println("Дополнительная сортировка толькл классов с четными значениями полей:");
-
                     Console.println("Студенты сортируются по номерам зачетных книжек:");
                     Helper.sortByEvens(students, Student.compareByEvenRecordBookNumber());
 
                     Console.println("Объекты после сортировки четных полей:");
                     Console.printObjects(students);
-
                 } else if (entityType == EntityType.USER) {
                     User[] users = castToUser(userObjects);
+
                     Helper.quicksort(users, 0, userObjects.length - 1);
                     Console.println("\n====================================");
                     Console.println("Массив после сортировки по всем полям:");
@@ -102,12 +96,7 @@ public class Main {
                     Console.println("Введите объект, который хотите найти:");
                     User user = User.inputUser();
                     Console.println("Поиск объекта:");
-                    int index = Helper.binarySearch(users, user);
-                    if (index == -1) {
-                        Console.println("Объект не найден.");
-                    } else {
-                        Console.printf("Индекс объекта: %d%n", index);
-                    }
+                    printSearchResult(Helper.binarySearch(users, user));
                 }
                 isCorrectInput = true;
             } else {
@@ -177,5 +166,9 @@ public class Main {
             students[i] = (Student) objects[i];
         }
         return students;
+    }
+
+    private static void printSearchResult(int index) {
+        Console.println(index == -1 ? "Объект не найден." : "Индекс объекта: " + index);
     }
 }

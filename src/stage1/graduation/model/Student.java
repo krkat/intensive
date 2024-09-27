@@ -1,6 +1,6 @@
 package stage1.graduation.model;
 
-import stage1.graduation.Console;
+import stage1.graduation.util.Console;
 
 import java.util.Comparator;
 import java.util.Objects;

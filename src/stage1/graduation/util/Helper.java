@@ -1,4 +1,4 @@
-package stage1.graduation;
+package stage1.graduation.util;
 
 import java.util.Comparator;
 
@@ -20,19 +20,17 @@ public class Helper {
             if (objects[i].compareTo((T) pivot) < 0) {
                 index++;
                 swap(objects, index, i);
-
-/*                T temp = objects[index];
-                objects[index] = objects[i];
-                objects[i] = temp;*/
             }
         }
         swap(objects, index + 1, endBound);
-        /*T temp = objects[index + 1];
-        objects[index + 1] = objects[endBound];
-        objects[endBound] = temp;*/
         return index + 1;
     }
 
+    private static <T> void swap(T[] objects, int first, int second) {
+        T swap = objects[first];
+        objects[first] = objects[second];
+        objects[second] = swap;
+    }
 
     public static <T> void quicksort(T[] objects, int startBound, int endBound, Comparator<T> comparator) {
         if (startBound < endBound) {
@@ -51,15 +49,12 @@ public class Helper {
                 index++;
                 swap(objects, index, i);
 
-/*                T temp = objects[index];
+                T temp = objects[index];
                 objects[index] = objects[i];
-                objects[i] = temp;*/
+                objects[i] = temp;
             }
         }
         swap(objects, index + 1, endBound);
-        /*T temp = objects[index + 1];
-        objects[index + 1] = objects[endBound];
-        objects[endBound] = temp;*/
         return index + 1;
     }
 
@@ -77,12 +72,6 @@ public class Helper {
                 swap(elements, i, indexMin);
             }
         }
-    }
-
-    private static <T> void swap(T[] objects, int first, int second) {
-        T swap = objects[first];
-        objects[first] = objects[second];
-        objects[second] = swap;
     }
 
     public static <T extends Comparable<T>> int binarySearch(Comparable<T>[] objects, T target) {

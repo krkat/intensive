@@ -1,4 +1,4 @@
-package stage1.graduation;
+package stage1.graduation.util;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;

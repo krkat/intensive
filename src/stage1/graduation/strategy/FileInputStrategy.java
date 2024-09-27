@@ -1,6 +1,6 @@
 package stage1.graduation.strategy;
 
-import stage1.graduation.Console;
+import stage1.graduation.util.Console;
 import stage1.graduation.model.Bus;
 import stage1.graduation.model.Student;
 import stage1.graduation.model.User;
