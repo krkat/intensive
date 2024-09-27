@@ -26,60 +26,17 @@ public class FileInputStrategy<T> implements InputStrategy<T> {
                 }
                 String[] data = line.split(",");
 
-                // Вызываем методы создания объектов в зависимости от типа
                 if (classType == Bus.class) {
-                    array[i] = classType.cast(createBusFromData(data, i));
+                    array[i] = (T) Bus.createFrom(data, i);
                 } else if (classType == User.class) {
-                    array[i] = classType.cast(createUserFromData(data, i));
+                    array[i] = (T) User.createFrom(data, i);
                 } else if (classType == Student.class) {
-                    array[i] = classType.cast(createStudentFromData(data, i));
+                    array[i] = (T) Student.createStudentFromData(data, i);
                 }
             }
         } catch (Exception e) {
             throw new RuntimeException("Ошибка чтения файла: " + e.getMessage());
         }
         return array;
-    }
-
-    private Bus createBusFromData(String[] data, int index) {
-        Bus bus;
-        try {
-            int number = Integer.parseInt(data[0]);
-            String model = data[1];
-            int mileage = Integer.parseInt(data[2]);
-            bus = new Bus.BusBuilder(model, number).setMileage(mileage).build();
-        } catch (Exception e) {
-            throw new RuntimeException("Ощибка при чтении " + index + " строки файла: " + e.getMessage());
-        }
-        return bus;
-    }
-
-    private User createUserFromData(String[] data, int index) {
-        User user;
-        try {
-            String name = data[0];
-            String password = data[1];
-            String email = data[2];
-            user = new User.UserBuilder(name).setPassword(password).setEmail(email).build();
-        } catch (Exception e) {
-            throw new RuntimeException("Ощибка при чтении " + index + " строки файла: " + e.getMessage());
-        }
-        return user;
-    }
-
-    private Student createStudentFromData(String[] data, int index) {
-        Student student;
-        try {
-            int groupNumber = Integer.parseInt(data[0]);
-            float averageScore = Float.parseFloat(data[1]);
-            int recordBookNumber = Integer.parseInt(data[2]);
-            student = new Student.StudentBuilder(recordBookNumber)
-                    .setGroupNumber(groupNumber)
-                    .setAverageMark(averageScore)
-                    .build();
-        } catch (Exception e) {
-            throw new RuntimeException("Ощибка при чтении " + index + " строки файла: " + e.getMessage());
-        }
-        return student;
     }
 }

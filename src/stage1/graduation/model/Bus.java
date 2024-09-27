@@ -63,6 +63,19 @@ public class Bus implements Comparable<Bus> {
         return Console.readInt();
     }
 
+    public static Bus createFrom(String[] data, int index) {
+        Bus bus;
+        try {
+            int number = Integer.parseInt(data[0]);
+            String model = data[1];
+            int mileage = Integer.parseInt(data[2]);
+            bus = new Bus.BusBuilder(model, number).setMileage(mileage).build();
+        } catch (Exception e) {
+            throw new RuntimeException("Ощибка при чтении " + index + " строки файла: " + e.getMessage());
+        }
+        return bus;
+    }
+
     public static Comparator<Bus> compareByModel() {
         return Comparator.comparing(Bus::getModel);
     }

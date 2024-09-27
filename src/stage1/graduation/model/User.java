@@ -63,6 +63,19 @@ public class User implements Comparable<User> {
         return Console.readString();
     }
 
+    public static User createFrom(String[] data, int index) {
+        User user;
+        try {
+            String name = data[0];
+            String password = data[1];
+            String email = data[2];
+            user = new User.UserBuilder(name).setPassword(password).setEmail(email).build();
+        } catch (Exception e) {
+            throw new RuntimeException("Ощибка при чтении " + index + " строки файла: " + e.getMessage());
+        }
+        return user;
+    }
+
     public static Comparator<User> compareByName() {
         return Comparator.comparing(User::getName);
     }

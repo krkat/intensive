@@ -66,6 +66,22 @@ public class Student implements Comparable<Student> {
         return Console.readFloat();
     }
 
+    public static Student createStudentFromData(String[] data, int index) {
+        Student student;
+        try {
+            int groupNumber = Integer.parseInt(data[0]);
+            float averageScore = Float.parseFloat(data[1]);
+            int recordBookNumber = Integer.parseInt(data[2]);
+            student = new Student.StudentBuilder(recordBookNumber)
+                    .setGroupNumber(groupNumber)
+                    .setAverageMark(averageScore)
+                    .build();
+        } catch (Exception e) {
+            throw new RuntimeException("Ощибка при чтении " + index + " строки файла: " + e.getMessage());
+        }
+        return student;
+    }
+
     public static Comparator<Student> compareByGroupNumber() {
         return Comparator.comparingInt(Student::getGroupNumber);
     }
