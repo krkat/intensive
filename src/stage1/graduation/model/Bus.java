@@ -1,5 +1,7 @@
 package stage1.graduation.model;
 
+import stage1.graduation.Console;
+
 import java.util.Comparator;
 import java.util.Objects;
 
@@ -25,6 +27,39 @@ public class Bus implements Comparable<Bus> {
 
     public int getMileage() {
         return mileage;
+    }
+
+    public static Bus inputBus() {
+        Bus bus = null;
+        do {
+            String model = askForBusModel();
+            int number = askForBusNumber();
+            int mileage = askForBusMileage();
+            try {
+                bus = new Bus.BusBuilder(model, number).setMileage(mileage).build();
+            } catch (RuntimeException e) {
+                Console.println("Ошибка! " + e.getMessage());
+                Console.println("Пожалуйста, повторите ввод:");
+                continue;
+            }
+            break;
+        } while (true);
+        return bus;
+    }
+
+    private static String askForBusModel() {
+        Console.print("Введите модель автобуса: ");
+        return Console.readString();
+    }
+
+    private static int askForBusNumber() {
+        Console.print("Введите номер автобуса > 0 и < 1000: ");
+        return Console.readInt();
+    }
+
+    private static int askForBusMileage() {
+        Console.print("Введите пробег автобуса >= 0: ");
+        return Console.readInt();
     }
 
     public static Comparator<Bus> compareByModel() {

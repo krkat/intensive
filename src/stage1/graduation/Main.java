@@ -7,8 +7,6 @@ import stage1.graduation.model.Student;
 import stage1.graduation.model.User;
 import stage1.graduation.strategy.InputData;
 
-import java.lang.reflect.Array;
-
 public class Main {
     static final int MIN_LENGTH = 1;
     static final int MAX_LENGTH = 10;
@@ -26,43 +24,79 @@ public class Main {
 
                 InputData strategy = new InputData(inputMethod);
                 Class classType = EntityType.getClassType(entityType);
-                Object[] userObjects = strategy.input(EntityType.getClassType(entityType), length);
-                Comparable[] comparableObjects = new Comparable[]{Comparable.class.cast(userObjects)};
+                Object[] userObjects = strategy.input(classType, length);
 
                 Console.println("\n====================================");
                 Console.println("Массив введенных объектов:");
                 Console.print(userObjects);
-                Arrays.quicksort(comparableObjects, 0, userObjects.length - 1);
-                Console.println("\n====================================");
-                Console.println("Массив после сортировки по всем полям:");
-                Console.print(userObjects);
+                //Comparable[] comparableObjects = new Comparable[]{Comparable.class.cast(userObjects)};
 
-                /*Console.println("\n====================================");
-                Console.println("Введите объект, который хотите найти:");
-                Object object = askObject(entityType);
-                Console.println("Поиск объекта:");
-                int index = Arrays.binarySearch(comparableObjects, classType.cast(object));
-                if (index == -1) {
-                    Console.println("Объект не найден.");
-                } else {
-                    Console.printf("Индекс объекта: %d%n", index);
-                }*/
+                if (entityType == EntityType.BUS) {
+                    Bus[] buses = (Bus[]) classType.cast(userObjects);
+                    Arrays.quicksort(buses, 0, length - 1);
+                    Console.println("\n====================================");
+                    Console.println("Массив после сортировки по всем полям:");
+                    Console.print(buses);
 
-                if (entityType != EntityType.USER) {
+                    Console.println("\n====================================");
+                    Console.println("Введите объект, который хотите найти:");
+                    Bus bus = Bus.inputBus();
+                    Console.println("Поиск объекта:");
+                    int index = Arrays.binarySearch(buses, bus);
+                    if (index == -1) {
+                        Console.println("Объект не найден.");
+                    } else {
+                        Console.printf("Индекс объекта: %d%n", index);
+                    }
+
                     Console.println("\n====================================");
                     Console.println("Дополнительная сортировка толькл классов с четными значениями полей:");
-                    if (entityType == EntityType.BUS) {
-                        Console.println("Автобусы сортируются по номерам:");
-                        Bus[] buses = new Bus[]{Bus.class.cast(userObjects)};
-                        Arrays.sortByEvens( buses, Bus.compareByEvenNumber());
+                    Console.println("Автобусы сортируются по номерам:");
+                    Arrays.sortByEvens(buses, Bus.compareByEvenNumber());
+                } else if (entityType == EntityType.STUDENT) {
+                    Student[] students = (Student[]) classType.cast(userObjects);
+                    Arrays.quicksort(students, 0, userObjects.length - 1);
+                    Console.println("\n====================================");
+                    Console.println("Массив после сортировки по всем полям:");
+                    Console.print(students);
+
+                    Console.println("\n====================================");
+                    Console.println("Введите объект, который хотите найти:");
+                    Student student = Student.inputStudent();
+                    Console.println("Поиск объекта:");
+                    int index = Arrays.binarySearch(students, student);
+                    if (index == -1) {
+                        Console.println("Объект не найден.");
+                    } else {
+                        Console.printf("Индекс объекта: %d%n", index);
                     }
-                    if (entityType == EntityType.STUDENT) {
-                        Console.println("Студенты сортируются по номерам зачетных книжек:");
-                        Student[] students = new Student[]{Student.class.cast(userObjects)};
-                        Arrays.sortByEvens(students, Student.compareByEvenRecordBookNumber());
-                    }
+                    Console.println("\n====================================");
+                    Console.println("Дополнительная сортировка толькл классов с четными значениями полей:");
+
+                    Console.println("Студенты сортируются по номерам зачетных книжек:");
+                    students = new Student[]{Student.class.cast(userObjects)};
+                    Arrays.sortByEvens(students, Student.compareByEvenRecordBookNumber());
+
                     Console.println("Объекты после сортировки четных полей:");
                     Console.print(userObjects);
+
+                } else if (entityType == EntityType.USER) {
+                    User[] users = (User[]) classType.cast(userObjects);
+                    Arrays.quicksort(users, 0, userObjects.length - 1);
+                    Console.println("\n====================================");
+                    Console.println("Массив после сортировки по всем полям:");
+                    Console.print(userObjects);
+
+                    Console.println("\n====================================");
+                    Console.println("Введите объект, который хотите найти:");
+                    User user = User.inputUser();
+                    Console.println("Поиск объекта:");
+                    int index = Arrays.binarySearch(users, user);
+                    if (index == -1) {
+                        Console.println("Объект не найден.");
+                    } else {
+                        Console.printf("Индекс объекта: %d%n", index);
+                    }
                 }
                 isCorrectInput = true;
             } else {
@@ -110,84 +144,17 @@ public class Main {
         return Console.readString();
     }
 
-    private static Object askObject(EntityType type) {
+    /*private static <T> T askObject(T type) {
         switch (type) {
-            case BUS: return inputBus(0);
-            case USER: return inputUser(0);
-            case STUDENT: return inputStudent(0);
+            case Bus.class:
+                return (T) inputBus(0);
+            case User.class:
+                return (T) inputUser(0);
+            case Student.class:
+                return (T) inputStudent(0);
         }
         return null;
-    }
+    }*/
 
-    private static Bus inputBus(int busIndex) {
-        Console.printf("Введите данные для автобуса %d:\n", busIndex + 1);
-        String model = askForBusModel();
-        int number = askForBusNumber();
-        int mileage = askForBusMileage();
-        return new Bus.BusBuilder(model, number).setMileage(mileage).build();
-    }
 
-    private static User inputUser(int userIndex) {
-        Console.printf("Введите данные для пользователя %d:\n", userIndex + 1);
-        String name = askForUserName();
-        String password = askForUserPassword();
-        String email = askForUserEmail();
-        return new User.UserBuilder(name).setPassword(password).setEmail(email).build();
-    }
-
-    private static Student inputStudent(int studentIndex) {
-        Console.printf("Введите данные для студента %d:\n", studentIndex + 1);
-        int recordBookNumber = askForStudentRecordBookNumber();
-        int groupNumber = askForStudentGroupNumber();
-        float averageScore = askForStudentAverageScore();
-        return new Student.StudentBuilder(recordBookNumber)
-                .setGroupNumber(groupNumber)
-                .setAverageMark(averageScore)
-                .build();
-    }
-
-    private static String askForBusModel() {
-        Console.print("Введите модель автобуса: ");
-        return Console.readString();
-    }
-
-    private static int askForBusNumber() {
-        Console.print("Введите номер автобуса: ");
-        return Console.readInt();
-    }
-
-    private static int askForBusMileage() {
-        Console.print("Введите пробег автобуса: ");
-        return Console.readInt();
-    }
-
-    private static String askForUserName() {
-        Console.print("Введите имя пользователя: ");
-        return Console.readString();
-    }
-
-    private static String askForUserPassword() {
-        Console.print("Введите пароль пользователя: ");
-        return Console.readString();
-    }
-
-    private static String askForUserEmail() {
-        Console.print("Введите email пользователя: ");
-        return Console.readString();
-    }
-
-    private static int askForStudentRecordBookNumber() {
-        Console.print("Введите номер зачётной книжки студента: ");
-        return Console.readInt();
-    }
-
-    private static int askForStudentGroupNumber() {
-        Console.print("Введите номер группы студента: ");
-        return Console.readInt();
-    }
-
-    private static float askForStudentAverageScore() {
-        Console.print("Введите средний балл студента: ");
-        return Console.readFloat();
-    }
 }

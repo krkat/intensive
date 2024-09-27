@@ -1,5 +1,7 @@
 package stage1.graduation.model;
 
+import stage1.graduation.Console;
+
 import java.util.Comparator;
 import java.util.Objects;
 
@@ -25,6 +27,39 @@ public class User implements Comparable<User> {
 
     public String getEmail() {
         return email;
+    }
+
+    public static User inputUser() {
+        User user = null;
+        do {
+            String name = askForUserName();
+            String password = askForUserPassword();
+            String email = askForUserEmail();
+            try {
+                user = new User.UserBuilder(name).setPassword(password).setEmail(email).build();
+            } catch (RuntimeException e) {
+                Console.println("Ошибка! " + e.getMessage());
+                Console.println("Пожалуйста, повторите ввод:");
+                continue;
+            }
+            break;
+        } while (true);
+        return user;
+    }
+
+    private static String askForUserName() {
+        Console.print("Введите имя пользователя: ");
+        return Console.readString();
+    }
+
+    private static String askForUserPassword() {
+        Console.print("Введите пароль пользователя: ");
+        return Console.readString();
+    }
+
+    private static String askForUserEmail() {
+        Console.print("Введите email пользователя: ");
+        return Console.readString();
     }
 
     public static Comparator<User> compareByName() {

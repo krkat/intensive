@@ -1,5 +1,7 @@
 package stage1.graduation.model;
 
+import stage1.graduation.Console;
+
 import java.util.Comparator;
 import java.util.Objects;
 
@@ -27,6 +29,42 @@ public class Student implements Comparable<Student> {
         return recordBookNumber;
     }
 
+    public static Student inputStudent() {
+        Student student = null;
+        do {
+            int recordBookNumber = askForStudentRecordBookNumber();
+            int groupNumber = askForStudentGroupNumber();
+            float averageScore = askForStudentAverageScore();
+            try {
+                student = new Student.StudentBuilder(recordBookNumber)
+                        .setGroupNumber(groupNumber)
+                        .setAverageMark(averageScore)
+                        .build();
+            } catch (RuntimeException e) {
+                Console.println("Ошибка! " + e.getMessage());
+                Console.println("Пожалуйста, повторите ввод:");
+                continue;
+            }
+            break;
+        } while (true);
+        return student;
+    }
+
+    private static int askForStudentRecordBookNumber() {
+        Console.print("Введите номер зачётной книжки студента > 0 и < 999999: ");
+        return Console.readInt();
+    }
+
+    private static int askForStudentGroupNumber() {
+        Console.print("Введите номер группы студента > 0 и < 999999: ");
+        return Console.readInt();
+    }
+
+    private static float askForStudentAverageScore() {
+        Console.print("Введите средний балл студента >= 0.0 и <= 5.0f: ");
+        return Console.readFloat();
+    }
+
     public static Comparator<Student> compareByGroupNumber() {
         return Comparator.comparingInt(Student::getGroupNumber);
     }
@@ -42,7 +80,7 @@ public class Student implements Comparable<Student> {
     public static Comparator<Student> compareByEvenRecordBookNumber() {
         return (o1, o2) -> {
             if (o1.recordBookNumber % 2 == 0 && o2.recordBookNumber % 2 == 0) {
-                return Integer.compare(o1.recordBookNumber,o2.recordBookNumber);
+                return Integer.compare(o1.recordBookNumber, o2.recordBookNumber);
             } else return 0;
         };
     }
