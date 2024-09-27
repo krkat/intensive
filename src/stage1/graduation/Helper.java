@@ -2,7 +2,7 @@ package stage1.graduation;
 
 import java.util.Comparator;
 
-public class Arrays {
+public class Helper {
 
     public static <T> void quicksort(Comparable<T>[] objects, int startBound, int endBound) {
         if (startBound < endBound) {

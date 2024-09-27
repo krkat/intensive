@@ -30,7 +30,7 @@ public class Bus implements Comparable<Bus> {
     }
 
     public static Bus inputBus() {
-        Bus bus = null;
+        Bus bus;
         do {
             String model = askForBusModel();
             int number = askForBusNumber();

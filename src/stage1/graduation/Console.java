@@ -18,7 +18,7 @@ public class Console {
         System.out.printf(format, args);
     }
 
-    public static void print(Object... objects) {
+    public static void printObjects(Object... objects) {
         for (Object o : objects) {
             System.out.println(o);
         }

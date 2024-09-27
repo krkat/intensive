@@ -30,7 +30,7 @@ public class User implements Comparable<User> {
     }
 
     public static User inputUser() {
-        User user = null;
+        User user;
         do {
             String name = askForUserName();
             String password = askForUserPassword();

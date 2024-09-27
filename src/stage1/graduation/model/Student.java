@@ -30,7 +30,7 @@ public class Student implements Comparable<Student> {
     }
 
     public static Student inputStudent() {
-        Student student = null;
+        Student student;
         do {
             int recordBookNumber = askForStudentRecordBookNumber();
             int groupNumber = askForStudentGroupNumber();
@@ -52,12 +52,12 @@ public class Student implements Comparable<Student> {
     }
 
     private static int askForStudentRecordBookNumber() {
-        Console.print("Введите номер зачётной книжки студента > 0 и < 999999: ");
+        Console.print("Введите номер зачётной книжки студента > 0 и < 1_000_000: ");
         return Console.readInt();
     }
 
     private static int askForStudentGroupNumber() {
-        Console.print("Введите номер группы студента > 0 и < 999999: ");
+        Console.print("Введите номер группы студента > 0 и < 10_000: ");
         return Console.readInt();
     }
 
