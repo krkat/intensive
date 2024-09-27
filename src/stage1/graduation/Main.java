@@ -90,7 +90,7 @@ public class Main {
                     Helper.quicksort(users, 0, userObjects.length - 1);
                     Console.println("\n====================================");
                     Console.println("Массив после сортировки по всем полям:");
-                    Console.printObjects(userObjects);
+                    Console.printObjects(users);
 
                     Console.println("\n====================================");
                     Console.println("Введите объект, который хотите найти:");
