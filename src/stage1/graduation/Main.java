@@ -7,6 +7,8 @@ import stage1.graduation.model.Student;
 import stage1.graduation.model.User;
 import stage1.graduation.strategy.InputData;
 
+import java.lang.reflect.Array;
+
 public class Main {
     static final int MIN_LENGTH = 1;
     static final int MAX_LENGTH = 10;
@@ -18,47 +20,50 @@ public class Main {
         boolean isCorrectInput;
         do {
             if (YES.equals(userAnswer)) {
-                EntityType type = askEntityType();
+                EntityType entityType = askEntityType();
                 int length = askLength();
                 InputMethod inputMethod = askInputMethod();
 
                 InputData strategy = new InputData(inputMethod);
-                Object[] userObjects = strategy.input(EntityType.getClassType(type), length);
+                Class classType = EntityType.getClassType(entityType);
+                Object[] userObjects = strategy.input(EntityType.getClassType(entityType), length);
+                Comparable[] comparableObjects = new Comparable[]{Comparable.class.cast(userObjects)};
 
                 Console.println("\n====================================");
                 Console.println("Массив введенных объектов:");
                 Console.print(userObjects);
-
-                /*QuickSort.quicksort(userObjects, 0, userObjects.length - 1, Bus.compareByEvenMileage());
+                Arrays.quicksort(comparableObjects, 0, userObjects.length - 1);
                 Console.println("\n====================================");
                 Console.println("Массив после сортировки по всем полям:");
                 Console.print(userObjects);
 
-                Console.println("\n====================================");
+                /*Console.println("\n====================================");
                 Console.println("Введите объект, который хотите найти:");
-                Object object = askObject(type);
+                Object object = askObject(entityType);
                 Console.println("Поиск объекта:");
-                int index = BinarySearch.binarySearch(userObjects, object);
+                int index = Arrays.binarySearch(comparableObjects, classType.cast(object));
                 if (index == -1) {
                     Console.println("Объект не найден.");
                 } else {
                     Console.printf("Индекс объекта: %d%n", index);
-                }
+                }*/
 
-                if (type != EntityType.USER) {
+                if (entityType != EntityType.USER) {
                     Console.println("\n====================================");
                     Console.println("Дополнительная сортировка толькл классов с четными значениями полей:");
-                    if (type == EntityType.BUS) {
+                    if (entityType == EntityType.BUS) {
                         Console.println("Автобусы сортируются по номерам:");
-                        QuickSort.sortByEvens(userObjects, Bus.compareByEvenNumber());
+                        Bus[] buses = new Bus[]{Bus.class.cast(userObjects)};
+                        Arrays.sortByEvens( buses, Bus.compareByEvenNumber());
                     }
-                    if (type == EntityType.STUDENT) {
+                    if (entityType == EntityType.STUDENT) {
                         Console.println("Студенты сортируются по номерам зачетных книжек:");
-                        QuickSort.sortByEvens(userObjects, Student.compareByEvenRecordBookNumber());
+                        Student[] students = new Student[]{Student.class.cast(userObjects)};
+                        Arrays.sortByEvens(students, Student.compareByEvenRecordBookNumber());
                     }
                     Console.println("Объекты после сортировки четных полей:");
                     Console.print(userObjects);
-                }*/
+                }
                 isCorrectInput = true;
             } else {
                 isCorrectInput = false;
