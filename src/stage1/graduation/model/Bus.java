@@ -38,6 +38,7 @@ public class Bus implements Comparable<Bus> {
             try {
                 bus = new Bus.BusBuilder(model, number).setMileage(mileage).build();
             } catch (RuntimeException e) {
+                Console.println("");
                 Console.println("Ошибка! " + e.getMessage());
                 Console.println("Пожалуйста, повторите ввод:");
                 continue;

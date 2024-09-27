@@ -41,6 +41,7 @@ public class Student implements Comparable<Student> {
                         .setAverageMark(averageScore)
                         .build();
             } catch (RuntimeException e) {
+                Console.println("");
                 Console.println("Ошибка! " + e.getMessage());
                 Console.println("Пожалуйста, повторите ввод:");
                 continue;

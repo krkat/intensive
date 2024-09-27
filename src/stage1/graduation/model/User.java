@@ -38,6 +38,7 @@ public class User implements Comparable<User> {
             try {
                 user = new User.UserBuilder(name).setPassword(password).setEmail(email).build();
             } catch (RuntimeException e) {
+                Console.println("");
                 Console.println("Ошибка! " + e.getMessage());
                 Console.println("Пожалуйста, повторите ввод:");
                 continue;

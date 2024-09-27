@@ -32,7 +32,7 @@ public class Main {
                 //Comparable[] comparableObjects = new Comparable[]{Comparable.class.cast(userObjects)};
 
                 if (entityType == EntityType.BUS) {
-                    Bus[] buses = (Bus[]) classType.cast(userObjects);
+                    Bus[] buses = castToBus(userObjects);
                     Arrays.quicksort(buses, 0, length - 1);
                     Console.println("\n====================================");
                     Console.println("Массив после сортировки по всем полям:");
@@ -53,8 +53,10 @@ public class Main {
                     Console.println("Дополнительная сортировка толькл классов с четными значениями полей:");
                     Console.println("Автобусы сортируются по номерам:");
                     Arrays.sortByEvens(buses, Bus.compareByEvenNumber());
+                    Console.println("Объекты после сортировки четных полей:");
+                    Console.print(buses);
                 } else if (entityType == EntityType.STUDENT) {
-                    Student[] students = (Student[]) classType.cast(userObjects);
+                    Student[] students = castToStudent(userObjects);
                     Arrays.quicksort(students, 0, userObjects.length - 1);
                     Console.println("\n====================================");
                     Console.println("Массив после сортировки по всем полям:");
@@ -74,14 +76,13 @@ public class Main {
                     Console.println("Дополнительная сортировка толькл классов с четными значениями полей:");
 
                     Console.println("Студенты сортируются по номерам зачетных книжек:");
-                    students = new Student[]{Student.class.cast(userObjects)};
                     Arrays.sortByEvens(students, Student.compareByEvenRecordBookNumber());
 
                     Console.println("Объекты после сортировки четных полей:");
-                    Console.print(userObjects);
+                    Console.print(students);
 
                 } else if (entityType == EntityType.USER) {
-                    User[] users = (User[]) classType.cast(userObjects);
+                    User[] users = castToUser(userObjects);
                     Arrays.quicksort(users, 0, userObjects.length - 1);
                     Console.println("\n====================================");
                     Console.println("Массив после сортировки по всем полям:");
@@ -144,17 +145,27 @@ public class Main {
         return Console.readString();
     }
 
-    /*private static <T> T askObject(T type) {
-        switch (type) {
-            case Bus.class:
-                return (T) inputBus(0);
-            case User.class:
-                return (T) inputUser(0);
-            case Student.class:
-                return (T) inputStudent(0);
+    private static Bus[] castToBus(Object[] objects) {
+        Bus[] buses = new Bus[objects.length];
+        for (int i = 0; i < objects.length; i++) {
+            buses[i] = (Bus) objects[i];
         }
-        return null;
-    }*/
+        return buses;
+    }
 
+    private static User[] castToUser(Object[] objects) {
+        User[] users = new User[objects.length];
+        for (int i = 0; i < objects.length; i++) {
+            users[i] = (User) objects[i];
+        }
+        return users;
+    }
 
+    private static Student[] castToStudent(Object[] objects) {
+        Student[] students = new Student[objects.length];
+        for (int i = 0; i < objects.length; i++) {
+            students[i] = (Student) objects[i];
+        }
+        return students;
+    }
 }
